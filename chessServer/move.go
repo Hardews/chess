@@ -2,7 +2,6 @@ package chessServer
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -32,6 +31,38 @@ func getLocation(location string) (row int, col int) {
 	return
 }
 
+// 因为是镜像，所以要翻转
+func oppositeDirection(direction int) int {
+	switch direction {
+	case north:
+		return 3
+	case northeast:
+		return 34
+	case northeastE:
+		return 344
+	case east:
+		return 4
+	case southeast:
+		return 41
+	case southeastE:
+		return 411
+	case south:
+		return 1
+	case southwest:
+		return 12
+	case southwestE:
+		return 122
+	case west:
+		return 2
+	case northwest:
+		return 23
+	case northwestE:
+		return 233
+	default:
+		return 0
+	}
+}
+
 func newRowAndCol(row, col int) (string, string) {
 	return strconv.Itoa(row), strconv.Itoa(col)
 }
@@ -41,6 +72,10 @@ func (c *chess) gunMove(num, direction, stepsCount int) error {
 	var count = 0
 	var nRow, nCol = row, col
 	var chessInRoad []int
+
+	if c.arr[row][col].attribute == "green" {
+		direction = oppositeDirection(direction)
+	}
 
 	switch direction {
 	case north:
@@ -263,13 +298,26 @@ func (c *chess) commanderMove(direction int) error {
 	var stepsCount = 1
 	var count = 0
 
+	if c.arr[row][col].attribute == "green" {
+		direction = oppositeDirection(direction)
+	}
+
 	switch direction {
 	case north:
 		nRow = row - stepsCount
-		if nRow < 0 {
-			// 如果移动的步数超过棋盘范围
-			return ErrOfCanNotMove
+		switch c.arr[row][col].attribute {
+		case "green":
+			if nRow < 0 {
+				// 如果移动的步数超过棋盘范围
+				return ErrOfCanNotMove
+			}
+		case "red":
+			if nRow < 7 {
+				// 如果移动的步数超过棋盘范围
+				return ErrOfCanNotMove
+			}
 		}
+
 	case east:
 		nCol = col + stepsCount
 		if nCol > 5 {
@@ -278,9 +326,17 @@ func (c *chess) commanderMove(direction int) error {
 		}
 	case south:
 		nRow = row + stepsCount
-		if nRow > 2 {
-			// 如果移动的步数超过棋盘范围
-			return ErrOfCanNotMove
+		switch c.arr[row][col].attribute {
+		case "green":
+			if nRow > 2 {
+				// 如果移动的步数超过棋盘范围
+				return ErrOfCanNotMove
+			}
+		case "red":
+			if nRow > 9 {
+				// 如果移动的步数超过棋盘范围
+				return ErrOfCanNotMove
+			}
 		}
 	case west:
 		nCol = col - stepsCount
@@ -324,8 +380,12 @@ func (c *chess) soldierMove(num, direction int) error {
 	var count = 0
 
 	// 兵不能后退
-	if direction == south {
-		return ErrOfCanNotMove
+	if c.arr[row][col].attribute == "red" {
+		if direction == south {
+			return ErrOfCanNotMove
+		}
+	} else {
+		direction = oppositeDirection(direction)
 	}
 
 	switch direction {
@@ -341,12 +401,22 @@ func (c *chess) soldierMove(num, direction int) error {
 		}
 	case east:
 		nCol = col + stepsCount
-		if col+stepsCount > 5 {
+		if col+stepsCount > 8 {
 			// 如果移动的步数超过棋盘范围
 			return ErrOfCanNotMove
 		}
 
 		if c.arr[row][col+stepsCount].name != "" {
+			count++
+		}
+	case south:
+		nRow = row + stepsCount
+		if row+stepsCount > 8 {
+			// 如果移动的步数超过棋盘范围
+			return ErrOfCanNotMove
+		}
+
+		if c.arr[row+stepsCount][col].name != "" {
 			count++
 		}
 	case west:
@@ -361,9 +431,6 @@ func (c *chess) soldierMove(num, direction int) error {
 		}
 	}
 	switch {
-	// 如果大于1,兵不能前进
-	case count > 1:
-		return ErrOfCanNotMove
 	case count == 1:
 		// 等于1，判断是否为吃子，不是则不能移动
 		// 如果是友方棋子，不能吃
@@ -390,24 +457,43 @@ func (c *chess) guardMove(num, direction int) error {
 	var nRow, nCol = row, col
 	var count = 0
 
+	if c.arr[row][col].attribute == "red" {
+
+	}
+
 	switch direction {
 	case northeast:
 		nRow, nCol = row-1, col+1
-		if col+1 > 5 || row-1 < 0 {
-			// 如果移动的步数超过棋盘田字格范围
-			return ErrOfCanNotMove
+		switch c.arr[row][col].attribute {
+		case "red":
+			if col+1 > 5 || row-1 < 0 {
+				// 如果移动的步数超过棋盘范围
+				return ErrOfCanNotMove
+			}
+		case "green":
+			if col+1 > 5 || row-1 < 7 {
+				// 如果移动的步数超过棋盘范围
+				return ErrOfCanNotMove
+			}
 		}
 
-		if c.arr[row+1][col-1].name != "" {
+		if c.arr[row-1][col+1].name != "" {
 			count++
 		}
 
 	case southeast:
 		nRow, nCol = row+1, col+1
-		fmt.Println(nRow, nCol)
-		if col+1 > 5 || row+1 > 2 {
-			// 如果移动的步数超过棋盘范围
-			return ErrOfCanNotMove
+		switch c.arr[row][col].attribute {
+		case "red":
+			if col+1 > 5 || row+1 > 2 {
+				// 如果移动的步数超过棋盘范围
+				return ErrOfCanNotMove
+			}
+		case "green":
+			if col+1 > 5 || row+1 > 9 {
+				// 如果移动的步数超过棋盘范围
+				return ErrOfCanNotMove
+			}
 		}
 
 		if c.arr[row+1][col+1].name != "" {
@@ -416,9 +502,18 @@ func (c *chess) guardMove(num, direction int) error {
 
 	case southwest:
 		nRow, nCol = row+1, col-1
-		if col-1 < 3 || row+1 > 2 {
-			// 如果移动的步数超过棋盘范围
-			return ErrOfCanNotMove
+
+		switch c.arr[row][col].attribute {
+		case "green":
+			if col-1 < 3 || row+1 > 2 {
+				// 如果移动的步数超过棋盘范围
+				return ErrOfCanNotMove
+			}
+		case "red":
+			if col-1 > 3 || row+1 > 9 {
+				// 如果移动的步数超过棋盘范围
+				return ErrOfCanNotMove
+			}
 		}
 
 		if c.arr[row+1][col-1].name != "" {
@@ -427,9 +522,18 @@ func (c *chess) guardMove(num, direction int) error {
 
 	case northwest:
 		nRow, nCol = row-1, col-1
-		if col-1 < 3 || row-1 < 0 {
-			// 如果移动的步数超过棋盘范围
-			return ErrOfCanNotMove
+
+		switch c.arr[row][col].attribute {
+		case "red":
+			if col-1 < 3 || row-1 < 0 {
+				// 如果移动的步数超过棋盘范围
+				return ErrOfCanNotMove
+			}
+		case "green":
+			if col-1 < 3 || row-1 < 7 {
+				// 如果移动的步数超过棋盘范围
+				return ErrOfCanNotMove
+			}
 		}
 
 		if c.arr[row-1][col-1].name != "" {
@@ -465,15 +569,19 @@ func (c *chess) ministerMove(num, direction int) error {
 	var nRow, nCol = row, col
 	var count = 0
 
+	if c.arr[row][col].attribute == "green" {
+		direction = oppositeDirection(direction)
+	}
+
 	switch direction {
 	case northeast:
-		nRow, nCol = row+2, col-2
-		if row+2 > 8 || col-2 < 0 {
+		nRow, nCol = row-2, col+2
+		if col+2 > 9 || row-2 < 0 {
 			// 如果移动的步数超过棋盘范围
 			return ErrOfCanNotMove
 		}
 
-		if c.arr[row+2][col-2].name != "" {
+		if c.arr[row-2][col+2].name != "" {
 			count++
 		}
 	case southeast:
@@ -488,13 +596,13 @@ func (c *chess) ministerMove(num, direction int) error {
 		}
 
 	case southwest:
-		nRow, nCol = row-2, col+2
-		if col+2 > 9 || row-2 < 0 {
+		nRow, nCol = row+2, col-2
+		if row+2 > 9 || col-2 < 0 {
 			// 如果移动的步数超过棋盘范围
 			return ErrOfCanNotMove
 		}
 
-		if c.arr[row-2][col+2].name != "" {
+		if c.arr[row+2][col-2].name != "" {
 			count++
 		}
 
@@ -540,15 +648,19 @@ func (c *chess) horseMove(num, direction int) error {
 	nRow, nCol := row, col
 	var count = 0
 
+	if c.arr[row][col].attribute == "green" {
+		direction = oppositeDirection(direction)
+	}
+
 	switch direction {
 	case northeast:
-		nRow, nCol = row+2, col-1
-		if row+2 > 8 || col-1 < 0 {
+		nRow, nCol = row-2, col+1
+		if col+1 > 8 || row-2 < 0 {
 			// 如果移动的步数超过棋盘范围
 			return ErrOfCanNotMove
 		}
 
-		if c.arr[row+2][col-1].name != "" {
+		if c.arr[row-2][col+1].name != "" {
 			count++
 		}
 
@@ -586,13 +698,13 @@ func (c *chess) horseMove(num, direction int) error {
 		}
 
 	case southwest:
-		nRow, nCol = row-2, col+1
-		if col+1 > 9 || row-2 < 0 {
+		nRow, nCol = row+2, col-1
+		if row+2 > 9 || col-1 < 0 {
 			// 如果移动的步数超过棋盘范围
 			return ErrOfCanNotMove
 		}
 
-		if c.arr[row-2][col+1].name != "" {
+		if c.arr[row+2][col-1].name != "" {
 			count++
 		}
 

@@ -103,43 +103,43 @@ func InitChessboard() ([]chessboard, *chess, *chess) {
 
 	var cb []chessboard
 
-	chessArr[0][0] = storage{name: red.vehicle.name, attribute: "red"}
-	chessArr[0][1] = storage{name: red.horse.name, attribute: "red"}
-	chessArr[0][2] = storage{name: red.minister.name, attribute: "red"}
-	chessArr[0][3] = storage{name: red.guard.name, attribute: "red"}
-	chessArr[0][4] = storage{name: red.commander.name, attribute: "red"}
-	chessArr[0][5] = storage{name: red.guard.name, attribute: "red"}
-	chessArr[0][6] = storage{name: red.minister.name, attribute: "red"}
-	chessArr[0][7] = storage{name: red.horse.name, attribute: "red"}
-	chessArr[0][8] = storage{name: red.vehicle.name, attribute: "red"}
+	chessArr[0][0] = storage{name: green.vehicle.name, attribute: "green"}
+	chessArr[0][1] = storage{name: green.horse.name, attribute: "green"}
+	chessArr[0][2] = storage{name: green.minister.name, attribute: "green"}
+	chessArr[0][3] = storage{name: green.guard.name, attribute: "green"}
+	chessArr[0][4] = storage{name: green.commander.name, attribute: "green"}
+	chessArr[0][5] = storage{name: green.guard.name, attribute: "green"}
+	chessArr[0][6] = storage{name: green.minister.name, attribute: "green"}
+	chessArr[0][7] = storage{name: green.horse.name, attribute: "green"}
+	chessArr[0][8] = storage{name: green.vehicle.name, attribute: "green"}
 
-	chessArr[2][1] = storage{name: red.gun.name, attribute: "red"}
-	chessArr[2][7] = storage{name: red.gun.name, attribute: "red"}
+	chessArr[2][1] = storage{name: green.gun.name, attribute: "green"}
+	chessArr[2][7] = storage{name: green.gun.name, attribute: "green"}
 
-	chessArr[3][0] = storage{name: red.soldier.name, attribute: "red"}
-	chessArr[3][2] = storage{name: red.soldier.name, attribute: "red"}
-	chessArr[3][4] = storage{name: red.soldier.name, attribute: "red"}
-	chessArr[3][6] = storage{name: red.soldier.name, attribute: "red"}
-	chessArr[3][8] = storage{name: red.soldier.name, attribute: "red"}
+	chessArr[3][0] = storage{name: green.soldier.name, attribute: "green"}
+	chessArr[3][2] = storage{name: green.soldier.name, attribute: "green"}
+	chessArr[3][4] = storage{name: green.soldier.name, attribute: "green"}
+	chessArr[3][6] = storage{name: green.soldier.name, attribute: "green"}
+	chessArr[3][8] = storage{name: green.soldier.name, attribute: "green"}
 
-	chessArr[9][0] = storage{name: green.vehicle.name, attribute: "green"}
-	chessArr[9][1] = storage{name: green.horse.name, attribute: "green"}
-	chessArr[9][2] = storage{name: green.minister.name, attribute: "green"}
-	chessArr[9][3] = storage{name: green.guard.name, attribute: "green"}
-	chessArr[9][4] = storage{name: green.commander.name, attribute: "green"}
-	chessArr[9][5] = storage{name: green.guard.name, attribute: "green"}
-	chessArr[9][6] = storage{name: green.minister.name, attribute: "green"}
-	chessArr[9][7] = storage{name: green.horse.name, attribute: "green"}
-	chessArr[9][8] = storage{name: green.vehicle.name, attribute: "green"}
+	chessArr[9][0] = storage{name: red.vehicle.name, attribute: "red"}
+	chessArr[9][1] = storage{name: red.horse.name, attribute: "red"}
+	chessArr[9][2] = storage{name: red.minister.name, attribute: "red"}
+	chessArr[9][3] = storage{name: red.guard.name, attribute: "red"}
+	chessArr[9][4] = storage{name: red.commander.name, attribute: "red"}
+	chessArr[9][5] = storage{name: red.guard.name, attribute: "red"}
+	chessArr[9][6] = storage{name: red.minister.name, attribute: "red"}
+	chessArr[9][7] = storage{name: red.horse.name, attribute: "red"}
+	chessArr[9][8] = storage{name: red.vehicle.name, attribute: "red"}
 
-	chessArr[7][1] = storage{name: green.gun.name, attribute: "green"}
-	chessArr[7][7] = storage{name: green.gun.name, attribute: "green"}
+	chessArr[7][1] = storage{name: red.gun.name, attribute: "red"}
+	chessArr[7][7] = storage{name: red.gun.name, attribute: "red"}
 
-	chessArr[6][0] = storage{name: green.soldier.name, attribute: "green"}
-	chessArr[6][2] = storage{name: green.soldier.name, attribute: "green"}
-	chessArr[6][4] = storage{name: green.soldier.name, attribute: "green"}
-	chessArr[6][6] = storage{name: green.soldier.name, attribute: "green"}
-	chessArr[6][8] = storage{name: green.soldier.name, attribute: "green"}
+	chessArr[6][0] = storage{name: red.soldier.name, attribute: "red"}
+	chessArr[6][2] = storage{name: red.soldier.name, attribute: "red"}
+	chessArr[6][4] = storage{name: red.soldier.name, attribute: "red"}
+	chessArr[6][6] = storage{name: red.soldier.name, attribute: "red"}
+	chessArr[6][8] = storage{name: red.soldier.name, attribute: "red"}
 
 	cb = append(cb, chessNode)
 
