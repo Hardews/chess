@@ -11,10 +11,12 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
 var ROOM = make(map[string][]*chessServer.Client)
+var mu sync.Mutex
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
@@ -123,6 +125,7 @@ func newRoom(ctx *gin.Context) {
 	}
 
 	// 记录房间
+	mu.Lock()
 	roomNum := RandStringRunes(6)
 	err = service.NewRoom(roomNum)
 	if err != nil {
@@ -137,6 +140,7 @@ func newRoom(ctx *gin.Context) {
 	chessClient = append(chessClient, green)
 
 	ROOM[roomNum] = chessClient
+	mu.Unlock()
 
 	go client.getInstruction(roomNum, red, green)
 }
@@ -155,6 +159,7 @@ func ShowRoom(ctx *gin.Context) {
 }
 
 func JoinRoom(ctx *gin.Context) {
+	mu.Lock()
 	roomNum := ctx.Param("num")
 	clients := ROOM[roomNum]
 	if clients[1].State == 0 {
@@ -169,6 +174,7 @@ func JoinRoom(ctx *gin.Context) {
 		log.Println(err)
 		return
 	}
+	mu.Unlock()
 	client := &Client{roomNum: roomNum, conn: conn}
 	green := clients[1]
 	green.State = 0
