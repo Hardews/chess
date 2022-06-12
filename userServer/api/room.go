@@ -83,8 +83,12 @@ func (c *Client) getInstruction(roomNum string, client, rival *chessServer.Clien
 		num, _ := strconv.Atoi(INum)
 		direction, _ := strconv.Atoi(IDirection)
 		step, _ := strconv.Atoi(IStep)
-		flag := client.Operation(choose, num, direction, step, rival)
+		err, flag := client.Operation(choose, num, direction, step, rival)
 		if !flag {
+			if err == chessServer.ErrOfCanNotMove {
+				c.conn.WriteMessage(websocket.TextMessage, []byte(err.Error()))
+				continue
+			}
 			break
 		}
 		client.Print()

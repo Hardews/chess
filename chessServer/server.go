@@ -11,7 +11,7 @@ type Client struct {
 	user      *chess
 }
 
-func (c *Client) Operation(choose, num, direction, step int, Client *Client) (info bool) {
+func (c *Client) Operation(choose, num, direction, step int, Client *Client) (err error, info bool) {
 	var atr string
 	if c.attribute == 0 {
 		atr = "red"
@@ -25,42 +25,45 @@ func (c *Client) Operation(choose, num, direction, step int, Client *Client) (in
 
 	switch choose {
 	case 1:
-		err := c.gunMove(num, direction, step)
+		err = c.gunMove(num, direction, step)
 		if err != nil {
 			fmt.Println(err)
 		}
 	case 2:
-		err := c.horseMove(num, direction)
+		err = c.horseMove(num, direction)
 		if err != nil {
 			fmt.Println(err)
 		}
 	case 3:
-		err := c.guardMove(num, direction)
+		err = c.guardMove(num, direction)
 		if err != nil {
 			fmt.Println(err)
 		}
 	case 4:
-		err := c.vehicleMove(num, direction, step)
+		err = c.vehicleMove(num, direction, step)
 		if err != nil {
 			fmt.Println(err)
 		}
 	case 5:
-		err := c.ministerMove(num, direction)
+		err = c.ministerMove(num, direction)
 		if err != nil {
 			fmt.Println(err)
 		}
 	case 6:
-		err := c.commanderMove(direction)
+		err = c.commanderMove(direction)
 		if err != nil {
 			fmt.Println(err)
 		}
 	case 7:
-		err := c.soldierMove(num, direction)
+		err = c.soldierMove(num, direction)
 		if err != nil {
 			fmt.Println(err)
 		}
 	}
-	return true
+	if err != nil {
+		return err, false
+	}
+	return nil, true
 }
 
 func (c *Client) isWin(client *Client) (bool, int) {
