@@ -33,7 +33,7 @@ func (c *Client) getInstruction(roomNum string, client, rival *chessServer.Clien
 	for {
 		_, msg, err := c.conn.ReadMessage()
 		if err != nil {
-			if err == websocket.ErrCloseSent {
+			if flag := websocket.IsCloseError(err, websocket.CloseNormalClosure); flag {
 				err = nil
 				err = service.DelRoom(roomNum)
 				if err != nil {
@@ -78,7 +78,7 @@ func (c *Client) getInstruction(roomNum string, client, rival *chessServer.Clien
 	for true {
 		_, msg, err := c.conn.ReadMessage()
 		if err != nil {
-			if err == websocket.ErrCloseSent {
+			if flag := websocket.IsCloseError(err, websocket.CloseNormalClosure); flag {
 				err = nil
 				err = service.DelRoom(roomNum)
 				if err != nil {
