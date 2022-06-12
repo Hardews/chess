@@ -33,6 +33,15 @@ func (c *Client) getInstruction(roomNum string, client, rival *chessServer.Clien
 	for {
 		_, msg, err := c.conn.ReadMessage()
 		if err != nil {
+			if err == websocket.ErrCloseSent {
+				err = nil
+				err = service.DelRoom(roomNum)
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
+				return
+			}
 			log.Fatalln(err)
 		}
 
@@ -69,6 +78,15 @@ func (c *Client) getInstruction(roomNum string, client, rival *chessServer.Clien
 	for true {
 		_, msg, err := c.conn.ReadMessage()
 		if err != nil {
+			if err == websocket.ErrCloseSent {
+				err = nil
+				err = service.DelRoom(roomNum)
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
+				return
+			}
 			log.Fatalln(err)
 		}
 

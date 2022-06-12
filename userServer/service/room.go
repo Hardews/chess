@@ -9,3 +9,7 @@ func NewRoom(roomNum string) error {
 func ShowRoom() ([]string, error) {
 	return dao.ShowRoom()
 }
+
+func DelRoom(roomNum string) error {
+	return dao.DelRoom(roomNum)
+}

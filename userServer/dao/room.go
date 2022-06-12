@@ -12,3 +12,8 @@ func ShowRoom() ([]string, error) {
 	cmd := rdb.SMembers("room")
 	return cmd.Result()
 }
+
+func DelRoom(roomNum string) error {
+	cmd := rdb.Del(roomNum)
+	return cmd.Err()
+}
