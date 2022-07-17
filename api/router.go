@@ -11,8 +11,9 @@ func InitRouter() {
 	engine.POST("/login", Login)
 	engine.POST("/register", Register)
 
-	engine.GET("/new", newRoom)
+	engine.GET("/new", NewRoom)
 	engine.GET("/join/:num", JoinRoom)
+	engine.GET("/chess/:num", ShowChess)
 	engine.GET("/show", ShowRoom)
 
 	base := engine.Group("/")

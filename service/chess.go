@@ -1,7 +1,8 @@
-package chessServer
+package service
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 )
 
 type Client struct {
@@ -21,7 +22,6 @@ func (c *Client) Operation(choose, num, direction, step int, Client *Client) (er
 	fmt.Println(atr + " move")
 
 	c.sync(Client)
-	c.Print()
 
 	switch choose {
 	case 1:
@@ -108,30 +108,16 @@ func NewClient() (*Client, *Client) {
 	return &Client{State: 0, PreState: 0, attribute: 0, user: redUser}, &Client{State: 1, PreState: 0, attribute: 1, user: greenUser}
 }
 
-func (c *Client) Print() {
-	switch c.attribute {
-	case 1:
-		for _, v := range c.user.arr {
-			for _, s := range v {
-				if s.name == "" {
-					fmt.Print("   ")
-					continue
-				}
-				fmt.Print(s.name + " ")
+func Print(ctx *gin.Context, c *Client) {
+	for _, v := range c.user.arr {
+		for _, s := range v {
+			if s.name == "" {
+				fmt.Fprint(ctx.Writer, "   ")
+				continue
 			}
-			fmt.Println()
+			fmt.Fprint(ctx.Writer, s.name+" ")
 		}
-	case 0:
-		for i := 9; i >= 0; i-- {
-			for j := 8; j >= 0; j-- {
-				if c.user.arr[i][j].name == "" {
-					fmt.Print("   ")
-					continue
-				}
-				fmt.Print(c.user.arr[i][j].name + " ")
-			}
-			fmt.Println()
-		}
+		fmt.Fprintln(ctx.Writer, "")
 	}
 }
 

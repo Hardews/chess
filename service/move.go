@@ -1,4 +1,4 @@
-package chessServer
+package service
 
 import (
 	"errors"

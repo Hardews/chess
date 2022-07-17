@@ -1,12 +1,12 @@
 package main
 
 import (
-	"chess/userServer/api"
-	"chess/userServer/dao"
+	"chess/api"
+	"chess/dao"
 )
 
 func main() {
-	dao.InitDB()
+	//dao.InitDB()
 	dao.InitClient()
 	api.InitRouter()
 }

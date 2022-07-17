@@ -1,7 +1,7 @@
 package service
 
 import (
-	"chess/userServer/dao"
+	"chess/dao"
 	"database/sql"
 )
 

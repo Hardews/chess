@@ -1,4 +1,4 @@
-package chessServer
+package service
 
 func newUser() (*chess, *chess, []chessboard) {
 	cb, r, g := InitChessboard()

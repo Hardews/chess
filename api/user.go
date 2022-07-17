@@ -1,7 +1,7 @@
 package api
 
 import (
-	"chess/userServer/service"
+	service2 "chess/service"
 	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -27,7 +27,7 @@ func Login(ctx *gin.Context) {
 	}
 
 	// 检查账号是否正确
-	err, res := service.CheckPassword(user.Username, user.Password)
+	err, res := service2.CheckPassword(user.Username, user.Password)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(200, "无此账号")
@@ -68,7 +68,7 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	err, flag := service.CheckUsername(user.Username)
+	err, flag := service2.CheckUsername(user.Username)
 	if err != nil {
 		ctx.JSON(500, "internet error")
 		fmt.Println("check username failed, error: ", err)
@@ -79,14 +79,14 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	err, user.Password = service.Encryption(user.Password)
+	err, user.Password = service2.Encryption(user.Password)
 	if err != nil {
 		ctx.JSON(500, "internet error")
 		fmt.Println("encryption failed , err :", err)
 		return
 	}
 
-	err = service.WriteIn(user.Username, user.Password)
+	err = service2.WriteIn(user.Username, user.Password)
 	if err != nil {
 		ctx.JSON(500, "internet error")
 		fmt.Println("register failed,err:", err)
