@@ -144,9 +144,15 @@ func JoinRoom(ctx *gin.Context) {
 }
 
 func ShowChess(ctx *gin.Context) {
-	//roomNum := ctx.Param("num")
-	roomNum := "Hardews"
-	clients := ROOM[roomNum]
+	roomNum := ctx.Param("num")
+	//roomNum := "Hardews"
+	clients, ok := ROOM[roomNum]
+	if !ok {
+		ctx.JSON(200, gin.H{
+			"msg": "no this room",
+		})
+		return
+	}
 
 	fmt.Fprintln(ctx.Writer, "房间"+roomNum+"的比赛")
 	fmt.Fprint(ctx.Writer, "\n\n\n")

@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	//dao.InitDB()
+	dao.InitDB()
 	dao.InitClient()
 	api.InitRouter()
 }

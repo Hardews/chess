@@ -46,9 +46,13 @@ func Login(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{
 			"msg": token,
 		})
-		ctx.JSON(200, "successful")
+		ctx.JSON(200, gin.H{
+			"msg": "successful",
+		})
 	} else {
-		ctx.JSON(200, "密码错误")
+		ctx.JSON(200, gin.H{
+			"msg": "密码错误",
+		})
 		return
 	}
 

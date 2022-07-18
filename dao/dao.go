@@ -1,21 +1,22 @@
 package dao
 
 import (
-	"database/sql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+
 	"github.com/go-redis/redis"
 	"log"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
-	dB *sql.DB
+	dB *gorm.DB
 )
 
 func InitDB() {
-	var db, err = sql.Open("mysql", "root:lmh123@tcp(127.0.0.1:3306)/chess")
+	dsn := "root:lmh123@tcp(127.0.0.1:3306)/chess?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
 	dB = db

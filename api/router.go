@@ -27,3 +27,17 @@ func InitRouter() {
 		return
 	}
 }
+
+func SetUpRouter() *gin.Engine {
+	engine := gin.Default()
+
+	engine.POST("/login", Login)
+	engine.POST("/register", Register)
+
+	engine.GET("/new", NewRoom)
+	engine.GET("/join/:num", JoinRoom)
+	engine.GET("/chess/:num", ShowChess)
+	engine.GET("/show", ShowRoom)
+
+	return engine
+}

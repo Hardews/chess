@@ -83,9 +83,9 @@ func (c *Client) isWin(client *Client) (bool, int) {
 		atr1 = "green"
 	}
 
-	if c.user.arr[row][col].attribute != atr {
+	if c.user.arr[row][col].attribute != atr1 {
 		return true, c.attribute
-	} else if client.user.arr[row1][col1].attribute != atr1 {
+	} else if client.user.arr[row1][col1].attribute != atr {
 		return true, client.attribute
 	}
 	return false, 2

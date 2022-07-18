@@ -1,39 +1,21 @@
 package dao
 
 func CheckPassword(username string) (error, string) {
-	var checkPwd string
-	tx, err := dB.Prepare("select username,password from user where username = ?")
-	if err != nil {
-		return err, checkPwd
+	var checkPwd struct {
+		username string
+		password string
 	}
-	err = tx.QueryRow(username).Scan(&username, &checkPwd)
-	if err != nil {
-		return err, checkPwd
-	}
-	return err, checkPwd
+	tx := dB.Table("user").Select("password").Where("username = ?", username).Scan(&checkPwd)
+
+	return tx.Error, checkPwd.password
 }
 
 func CheckUsername(username string) error {
-	var checkUsername string
-	tx, err := dB.Prepare("select username from user where username = ?")
-	if err != nil {
-		return err
-	}
-
-	err = tx.QueryRow(username).Scan(checkUsername)
-	if err != nil {
-		return err
-	}
-	return err
+	tx := dB.Table("user").Select("username").Where("username = ", username)
+	return tx.Error
 }
+
 func WriteIn(username, password string) error {
-	tx, err := dB.Prepare("insert into user (username,password) values (?,?)")
-	if err != nil {
-		return err
-	}
-	_, err = tx.Exec(username, password)
-	if err != nil {
-		return err
-	}
-	return err
+	tx := dB.Table("user").Select("username", "password").Create([]string{username, password})
+	return tx.Error
 }
